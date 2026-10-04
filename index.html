@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kalkulator Nilai Tanah</title>
     <!-- Tailwind CSS CDN -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
-      href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap)"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -309,7 +309,7 @@
           onclick="hitungGG()"
           class="w-full md:w-auto px-12 py-3.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/20 transition duration-200 text-lg"
         >
-          Hitung Nilai Tanah (gg)
+          GG
         </button>
       </div>
 
@@ -400,13 +400,11 @@
     </div>
 
     <script>
-      // --- FITUR PROTEKSI / ANTI INSPECT & COPY ---
-      // 1. Matikan Klik Kanan
+      // --- ANTI INSPECT & COPY ---
       document.addEventListener('contextmenu', function (e) {
         e.preventDefault()
       })
 
-      // 2. Matikan Shortcut Inspect (F12, Ctrl+U, Ctrl+Shift+I, dll)
       document.addEventListener('keydown', function (e) {
         if (
           e.key === 'F12' ||
@@ -429,7 +427,6 @@
         }
       })
 
-      // 3. Matikan Drag Teks
       document.addEventListener('dragstart', function (e) {
         e.preventDefault()
       })
