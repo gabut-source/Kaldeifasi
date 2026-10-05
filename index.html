@@ -3,870 +3,867 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kalkulator Nilai Tanah & Deviasi</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Kalkulator ZNT Multi Sampel</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-    </style>
   </head>
-  <body class="bg-slate-50 text-slate-800 min-h-screen p-4 md:p-8">
-    <div class="max-w-6xl mx-auto space-y-6">
-      <!-- Header -->
-      <header class="text-center md:text-left border-b border-slate-200 pb-4">
-        <h1 class="text-2xl md:text-3xl font-bold text-slate-900">
-          Kalkulator Nilai Tanah
-        </h1>
-        <p class="text-slate-500 text-sm mt-1">
-          Hitung rata-rata nilai tanah per m², total nilai tanah, dan standar
-          deviasi dari 3 data pembanding.
-        </p>
-      </header>
-
-      <!-- Form Input Data -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Sampel 1 -->
-        <div
-          class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4"
-        >
+  <body
+    class="bg-[#5d587c] text-[#ffffff] font-sans min-h-screen pb-10 flex flex-col justify-center items-center"
+  >
+    <!-- Main Container: Tetap max-w-md di Mobile, melebar hingga max-w-5xl di PC -->
+    <main class="w-full max-w-md lg:max-w-5xl mx-auto px-4 pt-6 space-y-4">
+      <!-- Container Utama dengan Layout Grid di Desktop -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- Kolom Kiri: Form & Tab Navigasi (7 Kolom di PC) -->
+        <div class="lg:col-span-7 space-y-4">
+          <!-- Tab Navigation -->
           <div
-            class="flex items-center justify-between border-b border-slate-100 pb-2"
+            class="bg-[#464165] rounded-2xl p-1.5 shadow-md border border-[#373153] flex space-x-1"
           >
-            <h2 class="font-semibold text-slate-800 text-lg">Sampel Harga 1</h2>
-            <span
-              class="text-xs bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full font-medium"
-              >Data 1</span
+            <button
+              id="tabBtn_1"
+              onclick="switchTab(1)"
+              class="flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 bg-[#1f1a30] text-[#ffffff] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#373153]"
             >
+              <i class="fa-solid fa-map-pin text-[10px]"></i> Sampel 1
+            </button>
+            <button
+              id="tabBtn_2"
+              onclick="switchTab(2)"
+              class="flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <i class="fa-solid fa-map-pin text-[10px]"></i> Sampel 2
+            </button>
+            <button
+              id="tabBtn_3"
+              onclick="switchTab(3)"
+              class="flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <i class="fa-solid fa-map-pin text-[10px]"></i> Sampel 3
+            </button>
           </div>
 
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Jenis Objek Pembanding</label
-            >
-            <select
-              id="tipe1"
-              onchange="toggleBangunanInput(1)"
-              class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
-            >
-              <option value="TK">TK (Tanah Kosong)</option>
-              <option value="B">B (Bangunan / Rumah)</option>
-              <option value="R">R (Ruko / Komersial)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Tanggal Transaksi / Penawaran</label
-            >
-            <input
-              type="date"
-              id="tglTransaksi1"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-slate-700 bg-white"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Harga Transaksi/Penawaran (Rp)</label
-            >
-            <input
-              type="text"
-              id="harga1"
-              placeholder="0"
-              oninput="formatRupiahInput(this)"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold text-slate-900"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Luas Tanah (m²)</label
-            >
-            <input
-              type="number"
-              id="luasTanah1"
-              placeholder="0"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <!-- Input Tambahan Khusus Jika Pilih B (Bangunan) atau R (Ruko) -->
+          <!-- Form Inputs Container -->
           <div
-            id="containerBangunan1"
-            class="hidden space-y-3 pt-2 border-t border-dashed border-slate-200 bg-amber-50/50 p-3 rounded-lg"
+            class="bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-6 transition-all"
           >
-            <p class="text-xs font-semibold text-amber-800">
-              Atribut & Potongan Bangunan/Ruko:
-            </p>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Tahun Bangunan Dibuat</label
+            <!-- Form Sampel 1 -->
+            <div id="formSampel_1" class="space-y-3.5">
+              <div
+                class="flex items-center justify-between pb-2 border-b border-[#373153]"
               >
-              <input
-                type="number"
-                id="tahunDibuat1"
-                placeholder="Contoh: 2018"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
+                <span
+                  class="text-xs font-bold text-[#d0cde1] uppercase tracking-wider flex items-center gap-1.5"
+                >
+                  <i class="fa-solid fa-location-dot text-[#ffffff]"></i> Data
+                  Titik Sampel 1
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Jenis Objek</label
+                  >
+                  <select
+                    id="jenisObjek_1"
+                    onchange="toggleBangunan(1)"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="" disabled selected>Pilih...</option>
+                    <option value="TK">Tanah Kosong (TK)</option>
+                    <option value="B">Bangunan (B)</option>
+                    <option value="R">Ruko (R)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Status Hak</label
+                  >
+                  <select
+                    id="statusKepemilikan_1"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="HM" selected>HM (0%)</option>
+                    <option value="HGB">HGB (5%)</option>
+                    <option value="HP">HP (5%)</option>
+                    <option value="HGU">HGU (5%)</option>
+                    <option value="TMA">Garapan (10%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Jenis Data</label
+                  >
+                  <select
+                    id="jenisData_1"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="" disabled selected>Pilih...</option>
+                    <option value="Transaksi">Transaksi (100%)</option>
+                    <option value="Penawaran">Penawaran (90%)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Tgl Transaksi</label
+                  >
+                  <input
+                    type="date"
+                    id="tanggalTransaksi_1"
+                    value="2026-10-04"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Harga (Rp)</label
+                  >
+                  <input
+                    type="number"
+                    id="hargaAwal_1"
+                    placeholder="0"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Luas Tanah (m²)</label
+                  >
+                  <input
+                    type="number"
+                    id="luasTanah_1"
+                    placeholder="0"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <!-- Sub Bangunan 1 -->
+              <div
+                id="secBangunan_1"
+                class="pt-3 border-t border-[#373153] space-y-3 hidden"
+              >
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Luas Bgn (m²)</label
+                    >
+                    <input
+                      type="number"
+                      id="luasBangunan_1"
+                      placeholder="0"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Biaya/m² (Rp)</label
+                    >
+                    <input
+                      type="number"
+                      id="biayaBangunanPerM2_1"
+                      placeholder="0"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Thn Buat / Renov</label
+                    >
+                    <div class="flex gap-1.5">
+                      <input
+                        type="number"
+                        id="tahunPembuatan_1"
+                        placeholder="Buat"
+                        class="w-1/2 border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                      />
+                      <input
+                        type="number"
+                        id="tahunRenovasi_1"
+                        placeholder="Renov"
+                        class="w-1/2 border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Kondisi Fisik</label
+                    >
+                    <select
+                      id="kondisiFisik_1"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium cursor-pointer"
+                    >
+                      <option value="" disabled selected>Pilih...</option>
+                      <option value="BS">Sangat Baik (BS)</option>
+                      <option value="B">Baik (B)</option>
+                      <option value="S">Sedang (S)</option>
+                      <option value="J">Jelek (J)</option>
+                      <option value="JS">Sangat Jelek (JS)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >1. Aksesibilitas Jalan</label
+
+            <!-- Form Sampel 2 -->
+            <div id="formSampel_2" class="space-y-3.5 hidden">
+              <div
+                class="flex items-center justify-between pb-2 border-b border-[#373153]"
               >
-              <select
-                id="jalan1"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                <span
+                  class="text-xs font-bold text-[#d0cde1] uppercase tracking-wider flex items-center gap-1.5"
+                >
+                  <i class="fa-solid fa-location-dot text-[#ffffff]"></i> Data
+                  Titik Sampel 2
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Jenis Objek</label
+                  >
+                  <select
+                    id="jenisObjek_2"
+                    onchange="toggleBangunan(2)"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="" disabled selected>Pilih...</option>
+                    <option value="TK">Tanah Kosong (TK)</option>
+                    <option value="B">Bangunan (B)</option>
+                    <option value="R">Ruko (R)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Status Hak</label
+                  >
+                  <select
+                    id="statusKepemilikan_2"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="HM" selected>HM (0%)</option>
+                    <option value="HGB">HGB (5%)</option>
+                    <option value="HP">HP (5%)</option>
+                    <option value="HGU">HGU (5%)</option>
+                    <option value="TMA">Garapan (10%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Jenis Data</label
+                  >
+                  <select
+                    id="jenisData_2"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="" disabled selected>Pilih...</option>
+                    <option value="Transaksi">Transaksi (100%)</option>
+                    <option value="Penawaran">Penawaran (90%)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Tgl Transaksi</label
+                  >
+                  <input
+                    type="date"
+                    id="tanggalTransaksi_2"
+                    value="2026-10-04"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Harga (Rp)</label
+                  >
+                  <input
+                    type="number"
+                    id="hargaAwal_2"
+                    placeholder="0"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Luas Tanah (m²)</label
+                  >
+                  <input
+                    type="number"
+                    id="luasTanah_2"
+                    placeholder="0"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <!-- Sub Bangunan 2 -->
+              <div
+                id="secBangunan_2"
+                class="pt-3 border-t border-[#373153] space-y-3 hidden"
               >
-                <option value="S">S (Sedang - Baseline)</option>
-                <option value="BS">BS (Baik Sekali / Main Road Utama)</option>
-                <option value="B">B (Baik / Jalan Lebar)</option>
-                <option value="J">J (Jelek / Jalan Sempit)</option>
-                <option value="JS">JS (Jelek Sekali / Gang Cilik)</option>
-              </select>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Luas Bgn (m²)</label
+                    >
+                    <input
+                      type="number"
+                      id="luasBangunan_2"
+                      placeholder="0"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Biaya/m² (Rp)</label
+                    >
+                    <input
+                      type="number"
+                      id="biayaBangunanPerM2_2"
+                      placeholder="0"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Thn Buat / Renov</label
+                    >
+                    <div class="flex gap-1.5">
+                      <input
+                        type="number"
+                        id="tahunPembuatan_2"
+                        placeholder="Buat"
+                        class="w-1/2 border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                      />
+                      <input
+                        type="number"
+                        id="tahunRenovasi_2"
+                        placeholder="Renov"
+                        class="w-1/2 border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Kondisi Fisik</label
+                    >
+                    <select
+                      id="kondisiFisik_2"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium cursor-pointer"
+                    >
+                      <option value="" disabled selected>Pilih...</option>
+                      <option value="BS">Sangat Baik (BS)</option>
+                      <option value="B">Baik (B)</option>
+                      <option value="S">Sedang (S)</option>
+                      <option value="J">Jelek (J)</option>
+                      <option value="JS">Sangat Jelek (JS)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >2. Drainase / Bebas Banjir</label
+
+            <!-- Form Sampel 3 -->
+            <div id="formSampel_3" class="space-y-3.5 hidden">
+              <div
+                class="flex items-center justify-between pb-2 border-b border-[#373153]"
               >
-              <select
-                id="drainase1"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                <span
+                  class="text-xs font-bold text-[#d0cde1] uppercase tracking-wider flex items-center gap-1.5"
+                >
+                  <i class="fa-solid fa-location-dot text-[#ffffff]"></i> Data
+                  Titik Sampel 3
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Jenis Objek</label
+                  >
+                  <select
+                    id="jenisObjek_3"
+                    onchange="toggleBangunan(3)"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="" disabled selected>Pilih...</option>
+                    <option value="TK">Tanah Kosong (TK)</option>
+                    <option value="B">Bangunan (B)</option>
+                    <option value="R">Ruko (R)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Status Hak</label
+                  >
+                  <select
+                    id="statusKepemilikan_3"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="HM" selected>HM (0%)</option>
+                    <option value="HGB">HGB (5%)</option>
+                    <option value="HP">HP (5%)</option>
+                    <option value="HGU">HGU (5%)</option>
+                    <option value="TMA">Garapan (10%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Jenis Data</label
+                  >
+                  <select
+                    id="jenisData_3"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  >
+                    <option value="" disabled selected>Pilih...</option>
+                    <option value="Transaksi">Transaksi (100%)</option>
+                    <option value="Penawaran">Penawaran (90%)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Tgl Transaksi</label
+                  >
+                  <input
+                    type="date"
+                    id="tanggalTransaksi_3"
+                    value="2026-10-04"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Harga (Rp)</label
+                  >
+                  <input
+                    type="number"
+                    id="hargaAwal_3"
+                    placeholder="0"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                    >Luas Tanah (m²)</label
+                  >
+                  <input
+                    type="number"
+                    id="luasTanah_3"
+                    placeholder="0"
+                    class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none hover:border-[#5d587c] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <!-- Sub Bangunan 3 -->
+              <div
+                id="secBangunan_3"
+                class="pt-3 border-t border-[#373153] space-y-3 hidden"
               >
-                <option value="S">S (Sedang - Bebas Genangan)</option>
-                <option value="B">B (Baik - Saluran Rapi & Terawat)</option>
-                <option value="J">J (Jelek - Sering Genangan)</option>
-                <option value="JS">JS (Jelek Sekali / Rawan Banjir)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >3. Kualitas / Elevasi Bidang</label
-              >
-              <select
-                id="kualitasBidang1"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Datar & Sejajar Jalan)</option>
-                <option value="BS">BS (Baik Sekali / Hook / Prospektif)</option>
-                <option value="B">B (Baik / Bentuk Presisi)</option>
-                <option value="J">J (Jelek / Di Bawah Jalan / Ngantong)</option>
-                <option value="JS">
-                  JS (Jelek Sekali / Perlu Urugan Banyak)
-                </option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Kondisi Fisik Bangunan</label
-              >
-              <select
-                id="kondisiBangunan1"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang / Layak huni)</option>
-                <option value="BS">BS (Baik Sekali / Baru / Mewah)</option>
-                <option value="B">B (Baik / Terawat)</option>
-                <option value="J">J (Jelek / Butuh Renovasi)</option>
-                <option value="JS">JS (Jelek Sekali / Rusak Berat)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Luas Bangunan (m²)</label
-              >
-              <input
-                type="number"
-                id="luasBangunan1"
-                placeholder="0"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Nilai Bangunan / m² (Rp)</label
-              >
-              <input
-                type="text"
-                id="nilaiBangunan1"
-                placeholder="0"
-                oninput="formatRupiahInput(this)"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Luas Bgn (m²)</label
+                    >
+                    <input
+                      type="number"
+                      id="luasBangunan_3"
+                      placeholder="0"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Biaya/m² (Rp)</label
+                    >
+                    <input
+                      type="number"
+                      id="biayaBangunanPerM2_3"
+                      placeholder="0"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Thn Buat / Renov</label
+                    >
+                    <div class="flex gap-1.5">
+                      <input
+                        type="number"
+                        id="tahunPembuatan_3"
+                        placeholder="Buat"
+                        class="w-1/2 border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                      />
+                      <input
+                        type="number"
+                        id="tahunRenovasi_3"
+                        placeholder="Renov"
+                        class="w-1/2 border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2 text-xs font-medium focus:ring-2 focus:ring-[#5d587c] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[11px] font-semibold text-[#d0cde1] mb-1"
+                      >Kondisi Fisik</label
+                    >
+                    <select
+                      id="kondisiFisik_3"
+                      class="w-full border border-[#373153] bg-[#1f1a30] text-white rounded-xl p-2.5 text-xs font-medium cursor-pointer"
+                    >
+                      <option value="" disabled selected>Pilih...</option>
+                      <option value="BS">Sangat Baik (BS)</option>
+                      <option value="B">Baik (B)</option>
+                      <option value="S">Sedang (S)</option>
+                      <option value="J">Jelek (J)</option>
+                      <option value="JS">Sangat Jelek (JS)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Tombol Kalkulasi GG (Desktop & Mobile) -->
+          <button
+            onclick="hitungGG()"
+            class="w-full py-3.5 bg-[#1f1a30] hover:bg-[#373153] active:scale-95 text-[#ffffff] font-extrabold text-sm rounded-2xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2 border border-[#373153] cursor-pointer group"
+          >
+            <i
+              class="fa-solid fa-bolt text-[#d0cde1] group-hover:scale-125 transition-transform"
+            ></i>
+            PROSES KALKULASI GG
+          </button>
         </div>
 
-        <!-- Sampel 2 -->
-        <div
-          class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4"
-        >
+        <!-- Kolom Kanan: Dashboard Hasil Analisis (5 Kolom di PC, Sticky di Top saat Scroll PC) -->
+        <div class="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
           <div
-            class="flex items-center justify-between border-b border-slate-100 pb-2"
+            class="bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-6 space-y-4"
           >
-            <h2 class="font-semibold text-slate-800 text-lg">Sampel Harga 2</h2>
-            <span
-              class="text-xs bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full font-medium"
-              >Data 2</span
+            <div
+              class="flex items-center justify-between pb-1 border-b border-[#373153]"
             >
-          </div>
+              <span
+                class="text-xs font-bold text-[#d0cde1] uppercase tracking-wider flex items-center gap-1.5"
+              >
+                <i class="fa-solid fa-chart-pie text-[#ffffff]"></i> Ringkasan
+                Hasil
+              </span>
+            </div>
 
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Jenis Objek Pembanding</label
+            <!-- Card Rata-Rata -->
+            <div
+              class="bg-[#1f1a30] text-[#ffffff] rounded-xl p-5 shadow-inner text-center border border-[#373153] transform hover:scale-[1.02] transition-transform"
             >
-            <select
-              id="tipe2"
-              onchange="toggleBangunanInput(2)"
-              class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
-            >
-              <option value="TK">TK (Tanah Kosong)</option>
-              <option value="B">B (Bangunan / Rumah)</option>
-              <option value="R">R (Ruko / Komersial)</option>
-            </select>
-          </div>
+              <span
+                class="text-[10px] text-[#d0cde1] uppercase tracking-widest font-bold block mb-1"
+              >
+                Rata-Rata INT ZNT / m²
+              </span>
+              <div
+                id="resRataRataM2"
+                class="text-2xl lg:text-3xl font-black text-[#ffffff] my-1"
+              >
+                Rp 0
+              </div>
+              <span class="text-[10px] text-[#d0cde1]/80">
+                Hasil gabungan 3 titik sampel
+              </span>
+            </div>
 
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Tanggal Transaksi / Penawaran</label
+            <!-- Breakdown per Sampel -->
+            <div
+              class="bg-[#373153] rounded-xl p-3.5 space-y-2.5 text-xs border border-[#1f1a30]"
             >
-            <input
-              type="date"
-              id="tglTransaksi2"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-slate-700 bg-white"
-            />
-          </div>
+              <div
+                class="flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors"
+              >
+                <span class="text-[#d0cde1] flex items-center gap-1.5">
+                  <span
+                    class="w-2 h-2 rounded-full bg-indigo-400 inline-block"
+                  ></span>
+                  Sampel 1:
+                </span>
+                <span id="resVal1" class="font-bold text-[#ffffff]"
+                  >Rp 0 / m²</span
+                >
+              </div>
+              <div
+                class="flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors"
+              >
+                <span class="text-[#d0cde1] flex items-center gap-1.5">
+                  <span
+                    class="w-2 h-2 rounded-full bg-purple-400 inline-block"
+                  ></span>
+                  Sampel 2:
+                </span>
+                <span id="resVal2" class="font-bold text-[#ffffff]"
+                  >Rp 0 / m²</span
+                >
+              </div>
+              <div
+                class="flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors"
+              >
+                <span class="text-[#d0cde1] flex items-center gap-1.5">
+                  <span
+                    class="w-2 h-2 rounded-full bg-violet-400 inline-block"
+                  ></span>
+                  Sampel 3:
+                </span>
+                <span id="resVal3" class="font-bold text-[#ffffff]"
+                  >Rp 0 / m²</span
+                >
+              </div>
+            </div>
 
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Harga Transaksi/Penawaran (Rp)</label
-            >
-            <input
-              type="text"
-              id="harga2"
-              placeholder="0"
-              oninput="formatRupiahInput(this)"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold text-slate-900"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Luas Tanah (m²)</label
-            >
-            <input
-              type="number"
-              id="luasTanah2"
-              placeholder="0"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <!-- Input Tambahan Khusus Jika Pilih B (Bangunan) atau R (Ruko) -->
-          <div
-            id="containerBangunan2"
-            class="hidden space-y-3 pt-2 border-t border-dashed border-slate-200 bg-amber-50/50 p-3 rounded-lg"
-          >
-            <p class="text-xs font-semibold text-amber-800">
-              Atribut & Potongan Bangunan/Ruko:
-            </p>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Tahun Bangunan Dibuat</label
+            <!-- Metric Deviasi -->
+            <div class="grid grid-cols-2 gap-2.5 text-center text-xs">
+              <div
+                class="bg-[#373153] p-3 rounded-xl border border-[#1f1a30] hover:border-[#5d587c] transition-colors"
               >
-              <input
-                type="number"
-                id="tahunDibuat2"
-                placeholder="Contoh: 2018"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >1. Aksesibilitas Jalan</label
+                <span
+                  class="block text-[10px] text-[#d0cde1] font-medium uppercase mb-1"
+                  >Std Deviasi</span
+                >
+                <span id="resStdDev" class="font-bold text-[#ffffff] text-sm"
+                  >Rp 0</span
+                >
+              </div>
+              <div
+                class="bg-[#373153] p-3 rounded-xl border border-[#1f1a30] hover:border-[#5d587c] transition-colors"
               >
-              <select
-                id="jalan2"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Baseline)</option>
-                <option value="BS">BS (Baik Sekali / Main Road Utama)</option>
-                <option value="B">B (Baik / Jalan Lebar)</option>
-                <option value="J">J (Jelek / Jalan Sempit)</option>
-                <option value="JS">JS (Jelek Sekali / Gang Cilik)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >2. Drainase / Bebas Banjir</label
-              >
-              <select
-                id="drainase2"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Bebas Genangan)</option>
-                <option value="B">B (Baik - Saluran Rapi & Terawat)</option>
-                <option value="J">J (Jelek - Sering Genangan)</option>
-                <option value="JS">JS (Jelek Sekali / Rawan Banjir)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >3. Kualitas / Elevasi Bidang</label
-              >
-              <select
-                id="kualitasBidang2"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Datar & Sejajar Jalan)</option>
-                <option value="BS">BS (Baik Sekali / Hook / Prospektif)</option>
-                <option value="B">B (Baik / Bentuk Presisi)</option>
-                <option value="J">J (Jelek / Di Bawah Jalan / Ngantong)</option>
-                <option value="JS">
-                  JS (Jelek Sekali / Perlu Urugan Banyak)
-                </option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Kondisi Fisik Bangunan</label
-              >
-              <select
-                id="kondisiBangunan2"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang / Layak huni)</option>
-                <option value="BS">BS (Baik Sekali / Baru / Mewah)</option>
-                <option value="B">B (Baik / Terawat)</option>
-                <option value="J">J (Jelek / Butuh Renovasi)</option>
-                <option value="JS">JS (Jelek Sekali / Rusak Berat)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Luas Bangunan (m²)</label
-              >
-              <input
-                type="number"
-                id="luasBangunan2"
-                placeholder="0"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Nilai Bangunan / m² (Rp)</label
-              >
-              <input
-                type="text"
-                id="nilaiBangunan2"
-                placeholder="0"
-                oninput="formatRupiahInput(this)"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Sampel 3 -->
-        <div
-          class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4"
-        >
-          <div
-            class="flex items-center justify-between border-b border-slate-100 pb-2"
-          >
-            <h2 class="font-semibold text-slate-800 text-lg">Sampel Harga 3</h2>
-            <span
-              class="text-xs bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full font-medium"
-              >Data 3</span
-            >
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Jenis Objek Pembanding</label
-            >
-            <select
-              id="tipe3"
-              onchange="toggleBangunanInput(3)"
-              class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
-            >
-              <option value="TK">TK (Tanah Kosong)</option>
-              <option value="B">B (Bangunan / Rumah)</option>
-              <option value="R">R (Ruko / Komersial)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Tanggal Transaksi / Penawaran</label
-            >
-            <input
-              type="date"
-              id="tglTransaksi3"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-slate-700 bg-white"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Harga Transaksi/Penawaran (Rp)</label
-            >
-            <input
-              type="text"
-              id="harga3"
-              placeholder="0"
-              oninput="formatRupiahInput(this)"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold text-slate-900"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1"
-              >Luas Tanah (m²)</label
-            >
-            <input
-              type="number"
-              id="luasTanah3"
-              placeholder="0"
-              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <!-- Input Tambahan Khusus Jika Pilih B (Bangunan) atau R (Ruko) -->
-          <div
-            id="containerBangunan3"
-            class="hidden space-y-3 pt-2 border-t border-dashed border-slate-200 bg-amber-50/50 p-3 rounded-lg"
-          >
-            <p class="text-xs font-semibold text-amber-800">
-              Atribut & Potongan Bangunan/Ruko:
-            </p>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Tahun Bangunan Dibuat</label
-              >
-              <input
-                type="number"
-                id="tahunDibuat3"
-                placeholder="Contoh: 2018"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >1. Aksesibilitas Jalan</label
-              >
-              <select
-                id="jalan3"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Baseline)</option>
-                <option value="BS">BS (Baik Sekali / Main Road Utama)</option>
-                <option value="B">B (Baik / Jalan Lebar)</option>
-                <option value="J">J (Jelek / Jalan Sempit)</option>
-                <option value="JS">JS (Jelek Sekali / Gang Cilik)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >2. Drainase / Bebas Banjir</label
-              >
-              <select
-                id="drainase3"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Bebas Genangan)</option>
-                <option value="B">B (Baik - Saluran Rapi & Terawat)</option>
-                <option value="J">J (Jelek - Sering Genangan)</option>
-                <option value="JS">JS (Jelek Sekali / Rawan Banjir)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >3. Kualitas / Elevasi Bidang</label
-              >
-              <select
-                id="kualitasBidang3"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang - Datar & Sejajar Jalan)</option>
-                <option value="BS">BS (Baik Sekali / Hook / Prospektif)</option>
-                <option value="B">B (Baik / Bentuk Presisi)</option>
-                <option value="J">J (Jelek / Di Bawah Jalan / Ngantong)</option>
-                <option value="JS">
-                  JS (Jelek Sekali / Perlu Urugan Banyak)
-                </option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Kondisi Fisik Bangunan</label
-              >
-              <select
-                id="kondisiBangunan3"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              >
-                <option value="S">S (Sedang / Layak huni)</option>
-                <option value="BS">BS (Baik Sekali / Baru / Mewah)</option>
-                <option value="B">B (Baik / Terawat)</option>
-                <option value="J">J (Jelek / Butuh Renovasi)</option>
-                <option value="JS">JS (Jelek Sekali / Rusak Berat)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Luas Bangunan (m²)</label
-              >
-              <input
-                type="number"
-                id="luasBangunan3"
-                placeholder="0"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1"
-                >Nilai Bangunan / m² (Rp)</label
-              >
-              <input
-                type="text"
-                id="nilaiBangunan3"
-                placeholder="0"
-                oninput="formatRupiahInput(this)"
-                class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
+                <span
+                  class="block text-[10px] text-[#d0cde1] font-medium uppercase mb-1"
+                  >Deviasi Relatif</span
+                >
+                <span
+                  id="resDeviasiPersen"
+                  class="font-bold text-[#d0cde1] text-sm"
+                  >0.00%</span
+                >
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </main>
 
-      <!-- Parameter Luas Tanah Objek -->
-      <div
-        class="bg-indigo-900 text-white p-5 rounded-xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-4"
-      >
-        <div>
-          <h3 class="font-semibold text-base">Luas Tanah Objek Yang Dinilai</h3>
-          <p class="text-xs text-indigo-200">
-            Luas tanah ini digunakan untuk menghitung Total Nilai Tanah Objek.
-          </p>
-        </div>
-        <div class="w-full md:w-auto flex items-center gap-2">
-          <input
-            type="number"
-            id="luasObjek"
-            placeholder="Contoh: 100"
-            class="w-full md:w-48 bg-indigo-800 border border-indigo-700 text-white placeholder-indigo-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-          <span class="text-sm font-medium">m²</span>
-        </div>
-      </div>
-
-      <!-- Tombol Hitung -->
-      <div class="text-center pt-2">
-        <button
-          onclick="hitungGG()"
-          class="w-full md:w-auto px-12 py-3.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/20 transition duration-200 text-lg"
-        >
-          Hitung Nilai Tanah
-        </button>
-      </div>
-
-      <!-- Hasil Kalkulasi -->
-      <div
-        id="hasilSection"
-        class="hidden bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6"
-      >
-        <h2
-          class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3"
-        >
-          Hasil Kalkulasi Nilai Tanah
-        </h2>
-
-        <!-- Ringkasan Kartu -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <span class="text-xs text-slate-500 font-medium"
-              >Rata-Rata Nilai Tanah / m²</span
-            >
-            <p
-              id="resNilaiPerMeter"
-              class="text-xl font-bold text-indigo-600 mt-1"
-            >
-              Rp 0
-            </p>
-          </div>
-
-          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <span class="text-xs text-slate-500 font-medium"
-              >Total Nilai Tanah Objek</span
-            >
-            <p
-              id="resNilaiTotal"
-              class="text-xl font-bold text-emerald-600 mt-1"
-            >
-              Rp 0
-            </p>
-          </div>
-
-          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <span class="text-xs text-slate-500 font-medium"
-              >Standar Deviasi / % Deviasi</span
-            >
-            <p id="resDeviasi" class="text-xl font-bold text-slate-800 mt-1">
-              Rp 0 (0%)
-            </p>
-            <span
-              id="resStatusDeviasi"
-              class="text-xs font-semibold px-2 py-0.5 rounded mt-2 inline-block"
-            ></span>
-          </div>
-        </div>
-
-        <!-- Rincian Nilai Tanah per Sampel -->
-        <div class="border-t border-slate-100 pt-4">
-          <h3 class="text-sm font-semibold text-slate-700 mb-3">
-            Breakdown Indikasi Nilai Tanah / m² per Sampel:
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-              <span class="text-xs text-slate-500 block"
-                >Sampel 1 (<span id="tipeSampel1"></span>)</span
-              >
-              <span id="detailSampel1" class="font-semibold text-slate-800"
-                >Rp 0 / m²</span
-              >
-            </div>
-            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-              <span class="text-xs text-slate-500 block"
-                >Sampel 2 (<span id="tipeSampel2"></span>)</span
-              >
-              <span id="detailSampel2" class="font-semibold text-slate-800"
-                >Rp 0 / m²</span
-              >
-            </div>
-            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-              <span class="text-xs text-slate-500 block"
-                >Sampel 3 (<span id="tipeSampel3"></span>)</span
-              >
-              <span id="detailSampel3" class="font-semibold text-slate-800"
-                >Rp 0 / m²</span
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <!-- JavaScript Logic -->
     <script>
-      // Set otomatis tanggal hari ini saat web dimuat
-      window.onload = function () {
-        const today = new Date().toISOString().split('T')[0]
+      const KOREKSI_HAK = { HM: 0, HGB: 5, HP: 5, HGU: 5, TMA: 10 }
+      const BIAYA_STANDAR = { B: 2000000, R: 3000000 }
+
+      function switchTab(index) {
         for (let i = 1; i <= 3; i++) {
-          const tglInput = document.getElementById(`tglTransaksi${i}`)
-          if (tglInput) {
-            tglInput.value = today
+          const form = document.getElementById(`formSampel_${i}`)
+          const btn = document.getElementById(`tabBtn_${i}`)
+          if (i === index) {
+            form.classList.remove('hidden')
+            btn.className =
+              'flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 bg-[#1f1a30] text-[#ffffff] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#373153]'
+          } else {
+            form.classList.add('hidden')
+            btn.className =
+              'flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer'
           }
         }
       }
 
-      const FAKTOR_PENYESUAIAN = {
-        jalan: {
-          BS: 1.1,
-          B: 1.05,
-          S: 1.0,
-          J: 0.95,
-          JS: 0.9,
-        },
-        drainase: {
-          B: 1.05,
-          S: 1.0,
-          J: 0.95,
-          JS: 0.9,
-        },
-        kualitasBidang: {
-          BS: 1.1,
-          B: 1.05,
-          S: 1.0,
-          J: 0.95,
-          JS: 0.9,
-        },
-      }
-
-      const FAKTOR_KONDISI_BANGUNAN = {
-        BS: 1.1,
-        B: 1.05,
-        S: 1.0,
-        J: 0.9,
-        JS: 0.8,
-      }
-
-      function formatRupiahInput(input) {
-        let value = input.value.replace(/\D/g, '')
-        if (value) {
-          input.value = new Intl.NumberFormat('id-ID').format(value)
-        } else {
-          input.value = ''
-        }
-      }
-
-      function cleanNumber(val) {
-        if (!val) return 0
-        return (
-          parseFloat(val.toString().replace(/\./g, '').replace(/,/g, '.')) || 0
+      function toggleBangunan(index) {
+        const jenis = document.getElementById(`jenisObjek_${index}`).value
+        const sec = document.getElementById(`secBangunan_${index}`)
+        const inputBiaya = document.getElementById(
+          `biayaBangunanPerM2_${index}`,
         )
-      }
 
-      function toggleBangunanInput(index) {
-        const tipe = document.getElementById(`tipe${index}`).value
-        const container = document.getElementById(`containerBangunan${index}`)
-        if (tipe === 'B' || tipe === 'R') {
-          container.classList.remove('hidden')
+        if (jenis === 'TK' || !jenis) {
+          sec.classList.add('hidden')
         } else {
-          container.classList.add('hidden')
+          sec.classList.remove('hidden')
+          if (inputBiaya && !inputBiaya.value) {
+            inputBiaya.value = BIAYA_STANDAR[jenis] || 2000000
+          }
         }
       }
 
-      function formatRupiah(num) {
-        return 'Rp ' + Math.round(num).toLocaleString('id-ID')
+      function formatRupiah(number) {
+        return new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR',
+          maximumFractionDigits: 0,
+        }).format(number)
+      }
+
+      function getPersenPenyusutan(umur, kondisi) {
+        let baseRate = umur * 0.6
+        const modifier = { BS: -5, B: 0, S: 5, J: 10, JS: 15 }
+        let finalRate = baseRate + (modifier[kondisi] || 0)
+        return Math.max(0, Math.min(80, Math.ceil(finalRate)))
+      }
+
+      function hitungNilaiPerM2(index) {
+        const TAHUN_ACUAN = 2026
+        const TANGGAL_CUTOFF = new Date('2026-12-31')
+
+        const jenisObjek = document.getElementById(`jenisObjek_${index}`).value
+        const statusKepemilikan = document.getElementById(
+          `statusKepemilikan_${index}`,
+        ).value
+        const jenisData = document.getElementById(`jenisData_${index}`).value
+        const tglTransVal = document.getElementById(
+          `tanggalTransaksi_${index}`,
+        ).value
+        const tglTrans = tglTransVal
+          ? new Date(tglTransVal)
+          : new Date('2026-10-04')
+        const hargaAwal =
+          parseFloat(document.getElementById(`hargaAwal_${index}`).value) || 0
+        const luasTanah =
+          parseFloat(document.getElementById(`luasTanah_${index}`).value) || 0
+
+        if (luasTanah <= 0 || hargaAwal <= 0) return 0
+
+        const hargaPenyesuaian =
+          jenisData === 'Penawaran' ? hargaAwal * 0.9 : hargaAwal
+
+        let nilaiBangunan = 0
+        if (jenisObjek && jenisObjek !== 'TK') {
+          const luasBangunan =
+            parseFloat(
+              document.getElementById(`luasBangunan_${index}`).value,
+            ) || 0
+          const biayaPerM2 =
+            parseFloat(
+              document.getElementById(`biayaBangunanPerM2_${index}`).value,
+            ) || 0
+          const thnBuat =
+            parseInt(
+              document.getElementById(`tahunPembuatan_${index}`).value,
+            ) || TAHUN_ACUAN
+          const thnRenov =
+            parseInt(document.getElementById(`tahunRenovasi_${index}`).value) ||
+            thnBuat
+          const kondisiFisik =
+            document.getElementById(`kondisiFisik_${index}`).value || 'B'
+
+          let umurEfektif = Math.ceil(
+            (TAHUN_ACUAN - thnBuat + 2 * (TAHUN_ACUAN - thnRenov)) / 3,
+          )
+          if (umurEfektif < 0) umurEfektif = 0
+
+          const persenPenyusutan = getPersenPenyusutan(
+            umurEfektif,
+            kondisiFisik,
+          )
+          const rcn = luasBangunan * biayaPerM2
+          nilaiBangunan = rcn * (1 - persenPenyusutan / 100)
+        }
+
+        const hargaTanahMurni = Math.max(0, hargaPenyesuaian - nilaiBangunan)
+        const diffDays = (TANGGAL_CUTOFF - tglTrans) / (1000 * 60 * 60 * 24)
+        const persenPenyesuaianWaktu = (diffDays / 365) * 10
+        const persenPenyesuaianHak = KOREKSI_HAK[statusKepemilikan] || 0
+
+        const totalPersenPenyesuaian =
+          persenPenyesuaianWaktu / 100 + persenPenyesuaianHak / 100
+        const nilaiTanahTotal = hargaTanahMurni * (1 + totalPersenPenyesuaian)
+
+        return nilaiTanahTotal / luasTanah
       }
 
       function hitungGG() {
-        const nilaiPerMeterArr = []
+        const v1 = hitungNilaiPerM2(1)
+        const v2 = hitungNilaiPerM2(2)
+        const v3 = hitungNilaiPerM2(3)
 
-        for (let i = 1; i <= 3; i++) {
-          const tipe = document.getElementById(`tipe${i}`).value
-          const hargaTotal = cleanNumber(
-            document.getElementById(`harga${i}`).value,
-          )
-          const luasTanah =
-            parseFloat(document.getElementById(`luasTanah${i}`).value) || 0
-          const tglTransaksiVal = document.getElementById(
-            `tglTransaksi${i}`,
-          ).value
-
-          if (hargaTotal <= 0 || luasTanah <= 0) {
-            alert(`Mohon lengkapi Harga dan Luas Tanah untuk Sampel ${i}`)
-            return
-          }
-
-          let nilaiTanahOnly = hargaTotal
-          let totalFaktorPenyesuaian = 1.0
-
-          if (tipe === 'B' || tipe === 'R') {
-            const luasBangunan =
-              parseFloat(document.getElementById(`luasBangunan${i}`).value) || 0
-            const nilaiBangunanPerMeter = cleanNumber(
-              document.getElementById(`nilaiBangunan${i}`).value,
-            )
-            const kondisiBgn = document.getElementById(
-              `kondisiBangunan${i}`,
-            ).value
-
-            const valJalan = document.getElementById(`jalan${i}`).value
-            const valDrainase = document.getElementById(`drainase${i}`).value
-            const valKualitas = document.getElementById(
-              `kualitasBidang${i}`,
-            ).value
-
-            // Perhitungan Umur Bangunan berdasarkan Tanggal Transaksi & Tahun Dibuat
-            const tahunDibuat =
-              parseInt(document.getElementById(`tahunDibuat${i}`).value) || 0
-            let tahunTransaksi = new Date().getFullYear()
-
-            if (tglTransaksiVal) {
-              tahunTransaksi = new Date(tglTransaksiVal).getFullYear()
-            }
-
-            let umurBangunan = 0
-            if (tahunDibuat > 0) {
-              umurBangunan = tahunTransaksi - tahunDibuat
-              if (umurBangunan < 0) umurBangunan = 0
-            }
-
-            // Penyesuaian faktor umur (depresiasi tipis 0.5% per tahun umur)
-            let faktorUmur = 1.0 - umurBangunan * 0.005
-            if (faktorUmur < 0.5) faktorUmur = 0.5 // Batas minimal faktor depresiasi
-
-            const fJalan = FAKTOR_PENYESUAIAN.jalan[valJalan] || 1.0
-            const fDrainase = FAKTOR_PENYESUAIAN.drainase[valDrainase] || 1.0
-            const fKualitas =
-              FAKTOR_PENYESUAIAN.kualitasBidang[valKualitas] || 1.0
-
-            totalFaktorPenyesuaian = fJalan * fDrainase * fKualitas
-
-            const faktorBgn = FAKTOR_KONDISI_BANGUNAN[kondisiBgn] || 1.0
-            const totalNilaiBangunan =
-              luasBangunan * nilaiBangunanPerMeter * faktorBgn * faktorUmur
-
-            if (totalNilaiBangunan >= hargaTotal) {
-              alert(
-                `Nilai bangunan pada Sampel ${i} melebihi atau sama dengan harga total properti!`,
-              )
-              return
-            }
-
-            nilaiTanahOnly = hargaTotal - totalNilaiBangunan
-          }
-
-          let nilaiPerMeter =
-            nilaiTanahOnly / luasTanah / totalFaktorPenyesuaian
-          nilaiPerMeterArr.push(nilaiPerMeter)
-
-          let namaTipe = 'Tanah Kosong'
-          if (tipe === 'B') namaTipe = 'Bangunan'
-          if (tipe === 'R') namaTipe = 'Ruko'
-
-          document.getElementById(`tipeSampel${i}`).innerText = namaTipe
-          document.getElementById(`detailSampel${i}`).innerText =
-            `${formatRupiah(nilaiPerMeter)} / m²`
-        }
-
-        const avgNilaiPerMeter = nilaiPerMeterArr.reduce((a, b) => a + b, 0) / 3
-        const luasObjek =
-          parseFloat(document.getElementById('luasObjek').value) || 0
-        const totalNilaiObjek = avgNilaiPerMeter * luasObjek
+        const arr = [v1, v2, v3]
+        const mean = (v1 + v2 + v3) / 3
 
         const variance =
-          nilaiPerMeterArr.reduce(
-            (acc, val) => acc + Math.pow(val - avgNilaiPerMeter, 2),
-            0,
-          ) / 2
-        const stdDeviasi = Math.sqrt(variance)
-        const persenDeviasi = (stdDeviasi / avgNilaiPerMeter) * 100
+          arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
+          (arr.length - 1)
+        const stdDev = Math.sqrt(variance)
+        const deviasiPersen = mean > 0 ? (stdDev / mean) * 100 : 0
 
-        document.getElementById('resNilaiPerMeter').innerText =
-          formatRupiah(avgNilaiPerMeter) + ' / m²'
+        document.getElementById('resVal1').innerText =
+          formatRupiah(v1) + ' / m²'
+        document.getElementById('resVal2').innerText =
+          formatRupiah(v2) + ' / m²'
+        document.getElementById('resVal3').innerText =
+          formatRupiah(v3) + ' / m²'
 
-        if (luasObjek > 0) {
-          document.getElementById('resNilaiTotal').innerText =
-            formatRupiah(totalNilaiObjek)
-        } else {
-          document.getElementById('resNilaiTotal').innerText = 'Isi luas objek'
-        }
+        document.getElementById('resRataRataM2').innerText =
+          formatRupiah(mean) + ' / m²'
+        document.getElementById('resStdDev').innerText = formatRupiah(
+          isNaN(stdDev) ? 0 : stdDev,
+        )
+        document.getElementById('resDeviasiPersen').innerText =
+          (isNaN(deviasiPersen) ? 0 : deviasiPersen).toFixed(2) + '%'
+      }
 
-        document.getElementById('resDeviasi').innerText =
-          `${formatRupiah(stdDeviasi)} (${persenDeviasi.toFixed(2)}%)`
-
-        const statusDev = document.getElementById('resStatusDeviasi')
-        if (persenDeviasi <= 30) {
-          statusDev.className =
-            'text-xs font-semibold px-2.5 py-1 rounded-full mt-2 inline-block bg-emerald-100 text-emerald-800'
-          statusDev.innerText = 'Presisi Data Bagus (≤ 30%)'
-        } else {
-          statusDev.className =
-            'text-xs font-semibold px-2.5 py-1 rounded-full mt-2 inline-block bg-rose-100 text-rose-800'
-          statusDev.innerText = 'Deviasi Tinggi (> 30%) - Periksa Variasi Data'
-        }
-
-        document.getElementById('hasilSection').classList.remove('hidden')
-        document
-          .getElementById('hasilSection')
-          .scrollIntoView({ behavior: 'smooth' })
+      window.onload = function () {
+        hitungGG()
       }
     </script>
   </body>
