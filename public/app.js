@@ -1,141 +1,6 @@
 let uploadedExcelData = []
       let sampleCount = 3
 
-      const KOREKSI_HAK = { HM: 0, HGB: 0.05, HP: 0.05, HGU: 0.05, TMA: 0.1 }
-
-      // 1. Tabel Matriks Penyusutan Bangunan
-      const TABEL_PENYUSUTAN_BANGUNAN = {
-        LEBIH_2JT: {
-          0: { BS: 0, B: 0, S: 0, J: 0, JS: 0 },
-          1: { BS: 3, B: 4, S: 5, J: 6, JS: 7 },
-          2: { BS: 5, B: 7, S: 9, J: 11, JS: 11 },
-          3: { BS: 7, B: 10, S: 13, J: 16, JS: 16 },
-          4: { BS: 10, B: 13, S: 17, J: 20, JS: 21 },
-          5: { BS: 12, B: 16, S: 20, J: 24, JS: 27 },
-          6: { BS: 14, B: 19, S: 23, J: 28, JS: 31 },
-          7: { BS: 15, B: 22, S: 26, J: 31, JS: 35 },
-          8: { BS: 15, B: 24, S: 29, J: 34, JS: 38 },
-          9: { BS: 15, B: 26, S: 32, J: 37, JS: 43 },
-          10: { BS: 15, B: 28, S: 35, J: 40, JS: 47 },
-          11: { BS: 15, B: 30, S: 38, J: 43, JS: 50 },
-          12: { BS: 15, B: 32, S: 40, J: 46, JS: 53 },
-          13: { BS: 15, B: 32, S: 42, J: 49, JS: 56 },
-          14: { BS: 15, B: 32, S: 44, J: 52, JS: 58 },
-          15: { BS: 15, B: 32, S: 46, J: 54, JS: 60 },
-          16: { BS: 15, B: 32, S: 48, J: 56, JS: 63 },
-          17: { BS: 15, B: 32, S: 50, J: 58, JS: 65 },
-          18: { BS: 15, B: 32, S: 50, J: 60, JS: 67 },
-          19: { BS: 15, B: 32, S: 50, J: 62, JS: 69 },
-          20: { BS: 15, B: 32, S: 50, J: 64, JS: 71 },
-          21: { BS: 15, B: 32, S: 50, J: 66, JS: 73 },
-          22: { BS: 15, B: 32, S: 50, J: 67, JS: 75 },
-          23: { BS: 15, B: 32, S: 50, J: 67, JS: 76 },
-          24: { BS: 15, B: 32, S: 50, J: 67, JS: 77 },
-          25: { BS: 15, B: 32, S: 50, J: 67, JS: 78 },
-          26: { BS: 15, B: 32, S: 50, J: 67, JS: 79 },
-          27: { BS: 15, B: 32, S: 50, J: 67, JS: 80 },
-        },
-        KURANG_SAMA_2JT: {
-          0: { BS: 0, B: 0, S: 0, J: 0, JS: 0 },
-          1: { BS: 4, B: 5, S: 6, J: 7, JS: 8 },
-          2: { BS: 8, B: 9, S: 10, J: 12, JS: 14 },
-          3: { BS: 11, B: 13, S: 14, J: 17, JS: 20 },
-          4: { BS: 14, B: 15, S: 18, J: 22, JS: 25 },
-          5: { BS: 16, B: 18, S: 22, J: 26, JS: 30 },
-          6: { BS: 16, B: 21, S: 26, J: 30, JS: 35 },
-          7: { BS: 16, B: 24, S: 29, J: 34, JS: 39 },
-          8: { BS: 16, B: 27, S: 32, J: 38, JS: 43 },
-          9: { BS: 16, B: 31, S: 35, J: 41, JS: 47 },
-          10: { BS: 16, B: 34, S: 38, J: 44, JS: 50 },
-          11: { BS: 16, B: 34, S: 41, J: 47, JS: 53 },
-          12: { BS: 16, B: 34, S: 44, J: 50, JS: 56 },
-          13: { BS: 16, B: 34, S: 47, J: 53, JS: 59 },
-          14: { BS: 16, B: 34, S: 50, J: 56, JS: 62 },
-          15: { BS: 16, B: 34, S: 52, J: 59, JS: 64 },
-          16: { BS: 16, B: 34, S: 52, J: 62, JS: 66 },
-          17: { BS: 16, B: 34, S: 52, J: 64, JS: 68 },
-          18: { BS: 16, B: 34, S: 52, J: 66, JS: 70 },
-          19: { BS: 16, B: 34, S: 52, J: 68, JS: 72 },
-          20: { BS: 16, B: 34, S: 52, J: 70, JS: 74 },
-          21: { BS: 16, B: 34, S: 52, J: 70, JS: 76 },
-          22: { BS: 16, B: 34, S: 52, J: 70, JS: 77 },
-          23: { BS: 16, B: 34, S: 52, J: 70, JS: 78 },
-          24: { BS: 16, B: 34, S: 52, J: 70, JS: 79 },
-          25: { BS: 16, B: 34, S: 52, J: 70, JS: 80 },
-        },
-      }
-
-      // 2. Tabel Matriks Penyusutan Ruko
-      const TABEL_PENYUSUTAN_RUKO = {
-        LEBIH_3JT: {
-          0: { BS: 0, B: 0, S: 0, J: 0, JS: 0 },
-          1: { BS: 2, B: 3, S: 4, J: 5, JS: 6 },
-          2: { BS: 4, B: 5, S: 7, J: 9, JS: 10 },
-          3: { BS: 6, B: 8, S: 10, J: 13, JS: 14 },
-          4: { BS: 8, B: 10, S: 14, J: 17, JS: 18 },
-          5: { BS: 10, B: 13, S: 18, J: 21, JS: 22 },
-          6: { BS: 12, B: 15, S: 21, J: 24, JS: 26 },
-          7: { BS: 13, B: 17, S: 24, J: 29, JS: 30 },
-          8: { BS: 13, B: 20, S: 27, J: 32, JS: 34 },
-          9: { BS: 13, B: 22, S: 30, J: 35, JS: 38 },
-          10: { BS: 13, B: 24, S: 33, J: 38, JS: 41 },
-          11: { BS: 13, B: 26, S: 36, J: 41, JS: 44 },
-          12: { BS: 13, B: 28, S: 39, J: 44, JS: 47 },
-          13: { BS: 13, B: 28, S: 41, J: 47, JS: 50 },
-          14: { BS: 13, B: 28, S: 43, J: 49, JS: 52 },
-          15: { BS: 13, B: 28, S: 45, J: 51, JS: 54 },
-          16: { BS: 13, B: 28, S: 47, J: 53, JS: 56 },
-          17: { BS: 13, B: 28, S: 49, J: 55, JS: 58 },
-          18: { BS: 13, B: 28, S: 49, J: 57, JS: 60 },
-          19: { BS: 13, B: 28, S: 49, J: 59, JS: 62 },
-          20: { BS: 13, B: 28, S: 49, J: 61, JS: 64 },
-          21: { BS: 13, B: 28, S: 49, J: 63, JS: 66 },
-          22: { BS: 13, B: 28, S: 49, J: 65, JS: 68 },
-          23: { BS: 13, B: 28, S: 49, J: 65, JS: 70 },
-          24: { BS: 13, B: 28, S: 49, J: 65, JS: 72 },
-          25: { BS: 13, B: 28, S: 49, J: 65, JS: 74 },
-          26: { BS: 13, B: 28, S: 49, J: 65, JS: 76 },
-          27: { BS: 13, B: 28, S: 49, J: 65, JS: 77 },
-          28: { BS: 13, B: 28, S: 49, J: 65, JS: 77 },
-          29: { BS: 13, B: 28, S: 49, J: 65, JS: 77 },
-          30: { BS: 13, B: 28, S: 49, J: 65, JS: 77 },
-        },
-        KURANG_SAMA_3JT: {
-          0: { BS: 0, B: 0, S: 0, J: 0, JS: 0 },
-          1: { BS: 3, B: 4, S: 5, J: 6, JS: 7 },
-          2: { BS: 7, B: 8, S: 9, J: 10, JS: 11 },
-          3: { BS: 10, B: 11, S: 13, J: 14, JS: 15 },
-          4: { BS: 12, B: 14, S: 17, J: 18, JS: 19 },
-          5: { BS: 14, B: 17, S: 21, J: 22, JS: 23 },
-          6: { BS: 14, B: 20, S: 25, J: 26, JS: 27 },
-          7: { BS: 14, B: 23, S: 29, J: 30, JS: 31 },
-          8: { BS: 14, B: 26, S: 32, J: 34, JS: 35 },
-          9: { BS: 14, B: 28, S: 35, J: 38, JS: 39 },
-          10: { BS: 14, B: 30, S: 38, J: 41, JS: 43 },
-          11: { BS: 14, B: 30, S: 41, J: 44, JS: 47 },
-          12: { BS: 14, B: 30, S: 44, J: 50, JS: 56 },
-          13: { BS: 14, B: 30, S: 47, J: 50, JS: 53 },
-          14: { BS: 14, B: 30, S: 49, J: 53, JS: 56 },
-          15: { BS: 14, B: 30, S: 51, J: 56, JS: 59 },
-          16: { BS: 14, B: 30, S: 51, J: 58, JS: 62 },
-          17: { BS: 14, B: 30, S: 51, J: 60, JS: 64 },
-          18: { BS: 14, B: 30, S: 51, J: 62, JS: 66 },
-          19: { BS: 14, B: 30, S: 51, J: 64, JS: 68 },
-          20: { BS: 14, B: 30, S: 51, J: 66, JS: 70 },
-          21: { BS: 14, B: 30, S: 51, J: 66, JS: 72 },
-          22: { BS: 14, B: 30, S: 51, J: 66, JS: 74 },
-          23: { BS: 14, B: 30, S: 51, J: 66, JS: 76 },
-          24: { BS: 14, B: 30, S: 51, J: 66, JS: 77 },
-          25: { BS: 14, B: 30, S: 51, J: 66, JS: 78 },
-          26: { BS: 14, B: 30, S: 51, J: 66, JS: 78 },
-          27: { BS: 14, B: 30, S: 51, J: 66, JS: 78 },
-          28: { BS: 14, B: 30, S: 51, J: 66, JS: 78 },
-          29: { BS: 14, B: 30, S: 51, J: 66, JS: 78 },
-          30: { BS: 14, B: 30, S: 51, J: 66, JS: 78 },
-        },
-      }
-
-
       function escapeHtml(value) {
         return String(value).replace(/[&<>"']/g, (character) => ({
           '&': '&amp;',
@@ -304,72 +169,6 @@ let uploadedExcelData = []
           `kondisiFisik_${targetKey}`,
           String(matchedRow['Keadaan Fisik Umumnya'] || '').trim(),
         )
-      }
-
-      // Fungsi Hitung Penyusutan Bangunan Umum
-      function hitungPenyusutanBangunan(
-        biayaPerMeter,
-        umurEfektif,
-        kondisiFisik,
-      ) {
-        const umurClamped = Math.min(Math.max(umurEfektif, 0), 50)
-        const tabelUtama =
-          biayaPerMeter > 2000000
-            ? TABEL_PENYUSUTAN_BANGUNAN.LEBIH_2JT
-            : TABEL_PENYUSUTAN_BANGUNAN.KURANG_SAMA_2JT
-
-        const maxUmurTabel = Math.max(...Object.keys(tabelUtama).map(Number))
-        const umurKey = umurClamped > maxUmurTabel ? maxUmurTabel : umurClamped
-
-        return tabelUtama[umurKey]?.[kondisiFisik] || 0
-      }
-
-      // Fungsi Hitung Penyusutan Ruko
-      function hitungPenyusutanRuko(biayaPerMeter, umurEfektif, kondisiFisik) {
-        const umurClamped = Math.min(Math.max(umurEfektif, 0), 50)
-        const tabelUtama =
-          biayaPerMeter > 3000000
-            ? TABEL_PENYUSUTAN_RUKO.LEBIH_3JT
-            : TABEL_PENYUSUTAN_RUKO.KURANG_SAMA_3JT
-
-        const maxUmurTabel = Math.max(...Object.keys(tabelUtama).map(Number))
-        const umurKey = umurClamped > maxUmurTabel ? maxUmurTabel : umurClamped
-
-        return tabelUtama[umurKey]?.[kondisiFisik] || 0
-      }
-
-      // Fungsi Hitung Nilai Bangunan / Ruko
-      function hitungNilaiBangunan(
-        jenisObjek,
-        luasBangunan,
-        biayaPerMeter,
-        umurEfektif,
-        kondisiFisik,
-      ) {
-        const rcnTotal = luasBangunan * biayaPerMeter
-        let persenPenyusutan = 0
-
-        if (jenisObjek === 'R') {
-          persenPenyusutan = hitungPenyusutanRuko(
-            biayaPerMeter,
-            umurEfektif,
-            kondisiFisik,
-          )
-        } else {
-          persenPenyusutan = hitungPenyusutanBangunan(
-            biayaPerMeter,
-            umurEfektif,
-            kondisiFisik,
-          )
-        }
-
-        const nilaiSisaBangunan = rcnTotal * (1 - persenPenyusutan / 100)
-
-        return {
-          rcnTotal: rcnTotal,
-          persenPenyusutan: persenPenyusutan,
-          nilaiSisaBangunan: nilaiSisaBangunan,
-        }
       }
 
       function formatThousandInput(input) {
@@ -590,173 +389,85 @@ let uploadedExcelData = []
         }).format(number)
       }
 
-      function kalkulasiModelExcel(data) {
-        const {
-          jenisObjek,
-          statusKepemilikan,
-          jenisData,
-          tglTransVal,
-          hargaAwal,
-          luasTanah,
-          luasBangunan,
-          biayaPerM2,
-          thnBuatInput,
-          thnRenovInput,
-          kondisiFisik,
-        } = data
+      let latestBatchRequest = 0
+      let latestSingleRequest = 0
 
-        if (luasTanah <= 0) return { nilai: 0, persenWaktu: 0 }
-
-        // 1. Tanggal Cutoff & Tahun Acuan dari transaksi
-        const tglTrans = tglTransVal ? new Date(tglTransVal) : new Date()
-        const tahunAcuan = tglTrans.getFullYear()
-        const tanggalCutoff = new Date(`${tahunAcuan}-12-31`)
-
-        // 2. Harga Penyesuaian Jenis Data (Transaksi = 100%, Penawaran = 90%)
-        const hargaPenyesuaianData =
-          jenisData === 'Penawaran' ? hargaAwal * 0.9 : hargaAwal
-
-        // 3. Hitung Nilai Bangunan / Ruko
-        let nilaiBangunanTotal = 0
-        if (jenisObjek && jenisObjek !== 'TK') {
-          const thnBuat = thnBuatInput || tahunAcuan
-          const thnRenov = thnRenovInput || thnBuat
-          const kondisi = kondisiFisik || 'B'
-
-          let umurEfektif = Math.ceil(
-            (tahunAcuan - thnBuat + 2 * (tahunAcuan - thnRenov)) / 3,
-          )
-          if (umurEfektif < 0) umurEfektif = 0
-
-          const hasilBangunan = hitungNilaiBangunan(
-            jenisObjek,
-            luasBangunan,
-            biayaPerM2,
-            umurEfektif,
-            kondisi,
-          )
-          nilaiBangunanTotal = hasilBangunan.nilaiSisaBangunan
-        }
-
-        // 4. Harga Tanah Transaksi per-m2
-        const hargaTanahMurniTotal = hargaPenyesuaianData - nilaiBangunanTotal
-        const hargaTanahPerM2 = hargaTanahMurniTotal / luasTanah
-
-        // 5. Penyesuaian Waktu & Hak (per-m2)
-        const diffDays = (tanggalCutoff - tglTrans) / (1000 * 60 * 60 * 24)
-        const persenPenyesuaianWaktu = (diffDays / 365) * 0.1
-        const persenPenyesuaianHak = KOREKSI_HAK[statusKepemilikan] || 0
-
-        // 6. Indikasi Nilai Tanah Akhir per-m2
-        const nilaiTanahAkhirPerM2 =
-          hargaTanahPerM2 * (1 + persenPenyesuaianWaktu + persenPenyesuaianHak)
-
+      function readSampleData(suffix) {
         return {
-          nilai: nilaiTanahAkhirPerM2,
-          persenWaktu: persenPenyesuaianWaktu * 100,
+          jenisObjek: document.getElementById(`jenisObjek_${suffix}`).value,
+          statusKepemilikan: document.getElementById(`statusKepemilikan_${suffix}`).value,
+          jenisData: document.getElementById(`jenisData_${suffix}`).value,
+          tglTransVal: document.getElementById(`tanggalTransaksi_${suffix}`).value,
+          hargaAwal: parseInputValue(`hargaAwal_${suffix}`),
+          luasTanah: parseInputValue(`luasTanah_${suffix}`),
+          luasBangunan: parseInputValue(`luasBangunan_${suffix}`),
+          biayaPerM2: parseInputValue(`biayaBangunanPerM2_${suffix}`),
+          thnBuatInput: Number.parseInt(document.getElementById(`tahunPembuatan_${suffix}`).value, 10) || null,
+          thnRenovInput: Number.parseInt(document.getElementById(`tahunRenovasi_${suffix}`).value, 10) || null,
+          kondisiFisik: document.getElementById(`kondisiFisik_${suffix}`).value,
         }
       }
 
-      function hitungNilaiPerM2(index) {
-        const data = {
-          jenisObjek: document.getElementById(`jenisObjek_${index}`).value,
-          statusKepemilikan: document.getElementById(
-            `statusKepemilikan_${index}`,
-          ).value,
-          jenisData: document.getElementById(`jenisData_${index}`).value,
-          tglTransVal: document.getElementById(`tanggalTransaksi_${index}`)
-            .value,
-          hargaAwal: parseInputValue(`hargaAwal_${index}`),
-          luasTanah: parseInputValue(`luasTanah_${index}`),
-          luasBangunan: parseInputValue(`luasBangunan_${index}`),
-          biayaPerM2: parseInputValue(`biayaBangunanPerM2_${index}`),
-          thnBuatInput: parseInt(
-            document.getElementById(`tahunPembuatan_${index}`).value,
-          ),
-          thnRenovInput: parseInt(
-            document.getElementById(`tahunRenovasi_${index}`).value,
-          ),
-          kondisiFisik: document.getElementById(`kondisiFisik_${index}`).value,
-        }
-
-        return kalkulasiModelExcel(data)
-      }
-
-      function hitungSingle() {
-        const data = {
-          jenisObjek: document.getElementById('jenisObjek_single').value,
-          statusKepemilikan: document.getElementById('statusKepemilikan_single')
-            .value,
-          jenisData: document.getElementById('jenisData_single').value,
-          tglTransVal: document.getElementById('tanggalTransaksi_single').value,
-          hargaAwal: parseInputValue('hargaAwal_single'),
-          luasTanah: parseInputValue('luasTanah_single'),
-          luasBangunan: parseInputValue('luasBangunan_single'),
-          biayaPerM2: parseInputValue('biayaBangunanPerM2_single'),
-          thnBuatInput: parseInt(
-            document.getElementById('tahunPembuatan_single').value,
-          ),
-          thnRenovInput: parseInt(
-            document.getElementById('tahunRenovasi_single').value,
-          ),
-          kondisiFisik: document.getElementById('kondisiFisik_single').value,
-        }
-
-        const res = kalkulasiModelExcel(data)
-
-        if (data.luasTanah <= 0) {
-          document.getElementById('resSingleVal').innerText = 'Rp 0 / m²'
-          document.getElementById('resSingleWaktu').innerText =
-            'Penyesuaian Waktu: 0.00%'
-          return
-        }
-
-        document.getElementById('resSingleVal').innerText =
-          formatRupiah(res.nilai) + ' / m²'
-        document.getElementById('resSingleWaktu').innerText =
-          'Penyesuaian Waktu: ' + res.persenWaktu.toFixed(2) + '%'
-      }
-
-      function hitungGG() {
-        const allResults = Array.from({ length: sampleCount }, (_, index) =>
-          hitungNilaiPerM2(index + 1),
-        )
-        const results = allResults.filter((_, index) =>
-          parseInputValue(`luasTanah_${index + 1}`) > 0,
-        )
-        const arr = results.map((result) => result.nilai)
-        const mean =
-          arr.length > 0
-            ? arr.reduce((sum, value) => sum + value, 0) / arr.length
-            : 0
-
-        const variance =
-          arr.length > 1
-            ? arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
-              (arr.length - 1)
-            : 0
-        const stdDev = Math.sqrt(variance)
-        const deviasiPersen = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0
-
-        allResults.forEach((result, index) => {
-          const sampleNumber = index + 1
-          document.getElementById(`resVal${sampleNumber}`).innerText =
-            formatRupiah(result.nilai) + ' / m²'
-          document.getElementById(`resWaktu${sampleNumber}`).innerText =
-            'Penyesuaian Waktu: ' + result.persenWaktu.toFixed(2) + '%'
+      async function requestCalculations(samples) {
+        const response = await fetch('/api/calculate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store',
+          body: JSON.stringify({ samples }),
         })
-
-        document.getElementById('resRataRataM2').innerText =
-          formatRupiah(mean) + ' / m²'
-        document.getElementById('resStdDev').innerText = formatRupiah(
-          isNaN(stdDev) ? 0 : stdDev,
-        )
-        document.getElementById('resDeviasiPersen').innerText =
-          (isNaN(deviasiPersen) ? 0 : deviasiPersen).toFixed(2) + '%'
-        document.getElementById('sampleCountText').textContent =
-          `Hasil gabungan ${results.length} titik sampel`
+        const payload = await response.json()
+        if (!response.ok) throw new Error(payload.error || 'Perhitungan gagal.')
+        return payload
       }
 
+      async function hitungSingle() {
+        const requestId = ++latestSingleRequest
+        const data = readSampleData('single')
+        try {
+          const { results } = await requestCalculations([data])
+          if (requestId !== latestSingleRequest) return
+          const result = results[0]
+          document.getElementById('resSingleVal').innerText =
+            formatRupiah(result.nilai) + ' / m²'
+          document.getElementById('resSingleWaktu').innerText =
+            'Penyesuaian Waktu: ' + result.persenWaktu.toFixed(2) + '%'
+        } catch (error) {
+          console.error(error)
+          document.getElementById('resSingleVal').innerText = 'Gagal menghitung'
+          document.getElementById('resSingleWaktu').innerText =
+            'Periksa koneksi ke layanan perhitungan.'
+        }
+      }
+
+      async function hitungGG() {
+        const requestId = ++latestBatchRequest
+        const samples = Array.from({ length: sampleCount }, (_, index) =>
+          readSampleData(index + 1),
+        )
+        try {
+          const { results, stats } = await requestCalculations(samples)
+          if (requestId !== latestBatchRequest) return
+
+          results.forEach((result, index) => {
+            const sampleNumber = index + 1
+            document.getElementById(`resVal${sampleNumber}`).innerText =
+              formatRupiah(result.nilai) + ' / m²'
+            document.getElementById(`resWaktu${sampleNumber}`).innerText =
+              'Penyesuaian Waktu: ' + result.persenWaktu.toFixed(2) + '%'
+          })
+          document.getElementById('resRataRataM2').innerText =
+            formatRupiah(stats.mean) + ' / m²'
+          document.getElementById('resStdDev').innerText = formatRupiah(stats.stdDev)
+          document.getElementById('resDeviasiPersen').innerText =
+            stats.deviationPercent.toFixed(2) + '%'
+          document.getElementById('sampleCountText').textContent =
+            `Hasil gabungan ${stats.sampleCount} titik sampel`
+        } catch (error) {
+          console.error(error)
+          document.getElementById('sampleCountText').textContent =
+            'Perhitungan gagal. Periksa koneksi ke layanan.'
+        }
+      }
       function setDefaultDates() {
         const todayWIB = new Date().toLocaleDateString('en-CA', {
           timeZone: 'Asia/Jakarta',
