@@ -260,6 +260,7 @@ let uploadedExcelData = []
             Sampel ${index}:
           </span>
           <div class="text-right">
+            <span data-sample-alert class="hidden text-[9px] font-extrabold tracking-wide text-red-300">MENYIMPANG ≥30%</span>
             <div id="resVal${index}" class="font-bold text-[#ffffff]">Rp 0 / m²</div>
             <div id="resWaktu${index}" class="text-[10px] text-[#d0cde1]/70">Penyesuaian Waktu: 0.00%</div>
           </div>`
@@ -450,16 +451,28 @@ let uploadedExcelData = []
 
           results.forEach((result, index) => {
             const sampleNumber = index + 1
-            document.getElementById(`resVal${sampleNumber}`).innerText =
+            const valueElement = document.getElementById(`resVal${sampleNumber}`)
+            valueElement.innerText =
               formatRupiah(result.nilai) + ' / m²'
+            valueElement.classList.toggle('text-red-400', result.isOutlier)
+            valueElement.classList.toggle('text-[#ffffff]', !result.isOutlier)
+            const row = document.querySelector(`[data-sample-result="${sampleNumber}"]`)
+            row?.querySelector('[data-sample-alert]')?.classList.toggle('hidden', !result.isOutlier)
             document.getElementById(`resWaktu${sampleNumber}`).innerText =
               'Penyesuaian Waktu: ' + result.persenWaktu.toFixed(2) + '%'
           })
           document.getElementById('resRataRataM2').innerText =
             formatRupiah(stats.mean) + ' / m²'
           document.getElementById('resStdDev').innerText = formatRupiah(stats.stdDev)
-          document.getElementById('resDeviasiPersen').innerText =
+          const deviationElement = document.getElementById('resDeviasiPersen')
+          deviationElement.innerText =
             stats.deviationPercent.toFixed(2) + '%'
+          const isHighDeviation = stats.deviationPercent >= 30
+          deviationElement.classList.toggle('text-red-400', isHighDeviation)
+          deviationElement.classList.toggle('text-[#d0cde1]', !isHighDeviation)
+          deviationElement.title = isHighDeviation
+            ? 'Deviasi mencapai atau melebihi 30%.'
+            : 'Deviasi masih di bawah 30%.'
           document.getElementById('sampleCountText').textContent =
             `Hasil gabungan ${stats.sampleCount} titik sampel`
         } catch (error) {

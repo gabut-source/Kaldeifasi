@@ -174,14 +174,32 @@ function calculateBatch(samples) {
   if (!Array.isArray(samples) || samples.length < 1 || samples.length > 100) {
     throw new Error('Kirim antara 1 sampai 100 sampel.')
   }
-  const results = samples.map(calculateOne)
-  const validValues = results.filter((_, index) => Number(samples[index].luasTanah) > 0).map((result) => result.nilai)
+  const calculatedResults = samples.map(calculateOne)
+  const validIndexes = calculatedResults
+    .map((_, index) => index)
+    .filter((index) => Number(samples[index].luasTanah) > 0)
+  const validValues = validIndexes.map((index) => calculatedResults[index].nilai)
   const mean = validValues.length ? validValues.reduce((sum, value) => sum + value, 0) / validValues.length : 0
   const variance = validValues.length > 1
     ? validValues.reduce((sum, value) => sum + (value - mean) ** 2, 0) / (validValues.length - 1)
     : 0
   const stdDev = Math.sqrt(variance)
   const deviationPercent = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0
+  const results = calculatedResults.map((result, index) => {
+    if (deviationPercent < 30 || !validIndexes.includes(index) || validIndexes.length < 2) {
+      return { ...result, isOutlier: false }
+    }
+
+    const peerValues = validIndexes
+      .filter((peerIndex) => peerIndex !== index)
+      .map((peerIndex) => calculatedResults[peerIndex].nilai)
+    const peerMean = peerValues.reduce((sum, value) => sum + value, 0) / peerValues.length
+    const relativeDifference = peerMean === 0
+      ? (result.nilai === 0 ? 0 : Infinity)
+      : (Math.abs(result.nilai - peerMean) / Math.abs(peerMean)) * 100
+
+    return { ...result, isOutlier: relativeDifference >= 30 }
+  })
   return {
     results,
     stats: { mean, stdDev, deviationPercent, sampleCount: validValues.length },
