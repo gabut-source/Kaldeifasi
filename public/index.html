@@ -57,7 +57,8 @@
         <div class="lg:col-span-7 space-y-4">
           <!-- Tab Navigation -->
           <div
-            class="bg-[#464165] rounded-2xl p-1.5 shadow-md border border-[#373153] flex space-x-1"
+            id="sampleTabList"
+            class="bg-[#464165] rounded-2xl p-1.5 shadow-md border border-[#373153] flex flex-wrap gap-1"
           >
             <button
               id="tabBtn_1"
@@ -81,6 +82,14 @@
               <i class="fa-solid fa-map-pin text-[10px]"></i> Sampel 3
             </button>
           </div>
+
+          <button
+            type="button"
+            onclick="addSample()"
+            class="w-full py-2.5 bg-[#464165] hover:bg-[#373153] text-[#ffffff] text-xs font-bold rounded-xl border border-[#373153] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-plus text-emerald-400"></i> Tambah Sampel
+          </button>
 
           <!-- Form Inputs Container -->
           <div
@@ -748,70 +757,16 @@
               >
                 Rp 0
               </div>
-              <span class="text-[10px] text-[#d0cde1]/80">
+              <span id="sampleCountText" class="text-[10px] text-[#d0cde1]/80">
                 Hasil gabungan 3 titik sampel
               </span>
             </div>
 
             <!-- Breakdown per Sampel -->
             <div
+              id="sampleResults"
               class="bg-[#373153] rounded-xl p-3.5 space-y-2.5 text-xs border border-[#1f1a30]"
-            >
-              <div
-                class="flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors"
-              >
-                <span class="text-[#d0cde1] flex items-center gap-1.5">
-                  <span
-                    class="w-2 h-2 rounded-full bg-indigo-400 inline-block"
-                  ></span>
-                  Sampel 1:
-                </span>
-                <div class="text-right">
-                  <div id="resVal1" class="font-bold text-[#ffffff]">
-                    Rp 0 / m²
-                  </div>
-                  <div id="resWaktu1" class="text-[10px] text-[#d0cde1]/70">
-                    Penyesuaian Waktu: 0.00%
-                  </div>
-                </div>
-              </div>
-              <div
-                class="flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors"
-              >
-                <span class="text-[#d0cde1] flex items-center gap-1.5">
-                  <span
-                    class="w-2 h-2 rounded-full bg-purple-400 inline-block"
-                  ></span>
-                  Sampel 2:
-                </span>
-                <div class="text-right">
-                  <div id="resVal2" class="font-bold text-[#ffffff]">
-                    Rp 0 / m²
-                  </div>
-                  <div id="resWaktu2" class="text-[10px] text-[#d0cde1]/70">
-                    Penyesuaian Waktu: 0.00%
-                  </div>
-                </div>
-              </div>
-              <div
-                class="flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors"
-              >
-                <span class="text-[#d0cde1] flex items-center gap-1.5">
-                  <span
-                    class="w-2 h-2 rounded-full bg-violet-400 inline-block"
-                  ></span>
-                  Sampel 3:
-                </span>
-                <div class="text-right">
-                  <div id="resVal3" class="font-bold text-[#ffffff]">
-                    Rp 0 / m²
-                  </div>
-                  <div id="resWaktu3" class="text-[10px] text-[#d0cde1]/70">
-                    Penyesuaian Waktu: 0.00%
-                  </div>
-                </div>
-              </div>
-            </div>
+            ></div>
 
             <!-- Metric Deviasi -->
             <div class="grid grid-cols-2 gap-2.5 text-center text-xs">
@@ -1088,4 +1043,5 @@
     <script src="/app.js" defer></script>
   </body>
 </html>
+
 

@@ -1,4 +1,5 @@
 let uploadedExcelData = []
+      let sampleCount = 3
 
       const KOREKSI_HAK = { HM: 0, HGB: 0.05, HP: 0.05, HGU: 0.05, TMA: 0.1 }
 
@@ -386,19 +387,82 @@ let uploadedExcelData = []
       }
 
       function switchTab(index) {
-        for (let i = 1; i <= 3; i++) {
-          const form = document.getElementById(`formSampel_${i}`)
-          const btn = document.getElementById(`tabBtn_${i}`)
-          if (i === index) {
-            form.classList.remove('hidden')
-            btn.className =
-              'flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 bg-[#1f1a30] text-[#ffffff] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#373153]'
-          } else {
-            form.classList.add('hidden')
-            btn.className =
-              'flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer'
-          }
-        }
+        document.querySelectorAll('[id^="formSampel_"]').forEach((form) => {
+          form.classList.toggle('hidden', form.id !== `formSampel_${index}`)
+        })
+
+        document.querySelectorAll('[id^="tabBtn_"]').forEach((button) => {
+          const isActive = button.id === `tabBtn_${index}`
+          button.className = isActive
+            ? 'flex-1 min-w-[90px] py-2.5 text-xs font-bold rounded-xl transition-all duration-200 bg-[#1f1a30] text-[#ffffff] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#373153]'
+            : 'flex-1 min-w-[90px] py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer'
+        })
+      }
+
+      function addSample() {
+        const index = ++sampleCount
+        const sourceForm = document.getElementById('formSampel_3')
+        const newForm = sourceForm.cloneNode(true)
+        newForm.innerHTML = newForm.innerHTML
+          .replace(/_3\b/g, `_${index}`)
+          .replace(/\(3\)/g, `(${index})`)
+          .replace(/Sampel 3/g, `Sampel ${index}`)
+        newForm.id = `formSampel_${index}`
+        newForm.classList.add('hidden')
+        newForm.querySelectorAll('input').forEach((input) => {
+          input.value =
+            input.type === 'date'
+              ? new Date().toLocaleDateString('en-CA', {
+                  timeZone: 'Asia/Jakarta',
+                })
+              : ''
+        })
+        newForm.querySelectorAll('select').forEach((select) => {
+          const defaultOption = Array.from(select.options).find(
+            (option) => option.defaultSelected,
+          )
+          select.selectedIndex = defaultOption
+            ? defaultOption.index
+            : 0
+        })
+        sourceForm.parentElement.appendChild(newForm)
+
+        const tab = document.createElement('button')
+        tab.id = `tabBtn_${index}`
+        tab.type = 'button'
+        tab.className =
+          'flex-1 min-w-[90px] py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer'
+        tab.innerHTML = `<i class="fa-solid fa-map-pin text-[10px]"></i> Sampel ${index}`
+        tab.addEventListener('click', () => switchTab(index))
+        document.getElementById('sampleTabList').appendChild(tab)
+
+        addSampleResultRow(index)
+        const enteredCount = Array.from(
+          { length: sampleCount },
+          (_, sampleIndex) =>
+            parseInputValue(`luasTanah_${sampleIndex + 1}`) > 0,
+        ).filter(Boolean).length
+        document.getElementById('sampleCountText').textContent =
+          `Hasil gabungan ${enteredCount} titik sampel`
+        switchTab(index)
+      }
+
+      function addSampleResultRow(index) {
+        const colors = ['indigo', 'purple', 'violet', 'blue', 'emerald', 'pink']
+        const color = colors[(index - 1) % colors.length]
+        const row = document.createElement('div')
+        row.className =
+          'flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors'
+        row.innerHTML = `
+          <span class="text-[#d0cde1] flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-${color}-400 inline-block"></span>
+            Sampel ${index}:
+          </span>
+          <div class="text-right">
+            <div id="resVal${index}" class="font-bold text-[#ffffff]">Rp 0 / m²</div>
+            <div id="resWaktu${index}" class="text-[10px] text-[#d0cde1]/70">Penyesuaian Waktu: 0.00%</div>
+          </div>`
+        document.getElementById('sampleResults').appendChild(row)
       }
 
       function toggleBangunan(index) {
@@ -559,33 +623,33 @@ let uploadedExcelData = []
       }
 
       function hitungGG() {
-        const res1 = hitungNilaiPerM2(1)
-        const res2 = hitungNilaiPerM2(2)
-        const res3 = hitungNilaiPerM2(3)
-
-        const arr = [res1.nilai, res2.nilai, res3.nilai]
-        const mean = (res1.nilai + res2.nilai + res3.nilai) / 3
+        const allResults = Array.from({ length: sampleCount }, (_, index) =>
+          hitungNilaiPerM2(index + 1),
+        )
+        const results = allResults.filter((_, index) =>
+          parseInputValue(`luasTanah_${index + 1}`) > 0,
+        )
+        const arr = results.map((result) => result.nilai)
+        const mean =
+          arr.length > 0
+            ? arr.reduce((sum, value) => sum + value, 0) / arr.length
+            : 0
 
         const variance =
-          arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
-          (arr.length - 1)
+          arr.length > 1
+            ? arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
+              (arr.length - 1)
+            : 0
         const stdDev = Math.sqrt(variance)
         const deviasiPersen = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0
 
-        document.getElementById('resVal1').innerText =
-          formatRupiah(res1.nilai) + ' / m²'
-        document.getElementById('resWaktu1').innerText =
-          'Penyesuaian Waktu: ' + res1.persenWaktu.toFixed(2) + '%'
-
-        document.getElementById('resVal2').innerText =
-          formatRupiah(res2.nilai) + ' / m²'
-        document.getElementById('resWaktu2').innerText =
-          'Penyesuaian Waktu: ' + res2.persenWaktu.toFixed(2) + '%'
-
-        document.getElementById('resVal3').innerText =
-          formatRupiah(res3.nilai) + ' / m²'
-        document.getElementById('resWaktu3').innerText =
-          'Penyesuaian Waktu: ' + res3.persenWaktu.toFixed(2) + '%'
+        allResults.forEach((result, index) => {
+          const sampleNumber = index + 1
+          document.getElementById(`resVal${sampleNumber}`).innerText =
+            formatRupiah(result.nilai) + ' / m²'
+          document.getElementById(`resWaktu${sampleNumber}`).innerText =
+            'Penyesuaian Waktu: ' + result.persenWaktu.toFixed(2) + '%'
+        })
 
         document.getElementById('resRataRataM2').innerText =
           formatRupiah(mean) + ' / m²'
@@ -594,6 +658,8 @@ let uploadedExcelData = []
         )
         document.getElementById('resDeviasiPersen').innerText =
           (isNaN(deviasiPersen) ? 0 : deviasiPersen).toFixed(2) + '%'
+        document.getElementById('sampleCountText').textContent =
+          `Hasil gabungan ${results.length} titik sampel`
       }
 
       function setDefaultDates() {
@@ -601,20 +667,15 @@ let uploadedExcelData = []
           timeZone: 'Asia/Jakarta',
         })
 
-        const dateInputIds = [
-          'tanggalTransaksi_1',
-          'tanggalTransaksi_2',
-          'tanggalTransaksi_3',
-          'tanggalTransaksi_single',
-        ]
-
-        dateInputIds.forEach((id) => {
-          const el = document.getElementById(id)
-          if (el) el.value = todayWIB
-        })
+        document
+          .querySelectorAll('[id^="tanggalTransaksi_"]')
+          .forEach((el) => (el.value = todayWIB))
       }
 
       window.onload = function () {
+        for (let index = 1; index <= sampleCount; index++) {
+          addSampleResultRow(index)
+        }
         setDefaultDates()
         hitungGG()
       }
