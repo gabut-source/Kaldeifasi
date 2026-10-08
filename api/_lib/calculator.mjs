@@ -185,18 +185,21 @@ function calculateBatch(samples) {
     : 0
   const stdDev = Math.sqrt(variance)
   const deviationPercent = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0
+  const sortedValues = [...validValues].sort((a, b) => a - b)
+  const middle = Math.floor(sortedValues.length / 2)
+  const median = sortedValues.length === 0
+    ? 0
+    : sortedValues.length % 2 === 0
+      ? (sortedValues[middle - 1] + sortedValues[middle]) / 2
+      : sortedValues[middle]
   const results = calculatedResults.map((result, index) => {
     if (deviationPercent < 30 || !validIndexes.includes(index) || validIndexes.length < 2) {
       return { ...result, isOutlier: false }
     }
 
-    const peerValues = validIndexes
-      .filter((peerIndex) => peerIndex !== index)
-      .map((peerIndex) => calculatedResults[peerIndex].nilai)
-    const peerMean = peerValues.reduce((sum, value) => sum + value, 0) / peerValues.length
-    const relativeDifference = peerMean === 0
+    const relativeDifference = median === 0
       ? (result.nilai === 0 ? 0 : Infinity)
-      : (Math.abs(result.nilai - peerMean) / Math.abs(peerMean)) * 100
+      : (Math.abs(result.nilai - median) / Math.abs(median)) * 100
 
     return { ...result, isOutlier: relativeDifference >= 30 }
   })
