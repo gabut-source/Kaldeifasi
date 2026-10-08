@@ -433,10 +433,11 @@ let uploadedExcelData = []
         tab.className =
           'flex-1 min-w-[90px] py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer'
         tab.innerHTML = `<i class="fa-solid fa-map-pin text-[10px]"></i> Sampel ${index}`
-        tab.addEventListener('click', () => switchTab(index))
+        tab.setAttribute('onclick', `switchTab(${index})`)
         document.getElementById('sampleTabList').appendChild(tab)
 
         addSampleResultRow(index)
+        updateDeleteButtons()
         const enteredCount = Array.from(
           { length: sampleCount },
           (_, sampleIndex) =>
@@ -451,10 +452,11 @@ let uploadedExcelData = []
         const colors = ['indigo', 'purple', 'violet', 'blue', 'emerald', 'pink']
         const color = colors[(index - 1) % colors.length]
         const row = document.createElement('div')
+        row.dataset.sampleResult = index
         row.className =
           'flex justify-between items-center hover:bg-[#1f1a30]/40 p-1 rounded transition-colors'
         row.innerHTML = `
-          <span class="text-[#d0cde1] flex items-center gap-1.5">
+          <span data-sample-label class="text-[#d0cde1] flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-${color}-400 inline-block"></span>
             Sampel ${index}:
           </span>
@@ -463,6 +465,99 @@ let uploadedExcelData = []
             <div id="resWaktu${index}" class="text-[10px] text-[#d0cde1]/70">Penyesuaian Waktu: 0.00%</div>
           </div>`
         document.getElementById('sampleResults').appendChild(row)
+      }
+
+      function updateDeleteButtons() {
+        document.querySelectorAll('.deleteSampleBtn').forEach((button) => {
+          button.classList.toggle('hidden', sampleCount <= 3)
+          button.classList.toggle('flex', sampleCount > 3)
+        })
+      }
+
+      function removeSample(index) {
+        if (sampleCount <= 3) return
+
+        const activeForm = Array.from(
+          document.querySelectorAll('[id^="formSampel_"]'),
+        ).find((form) => !form.classList.contains('hidden'))
+        const activeIndex = activeForm
+          ? Number(activeForm.id.split('_').pop())
+          : 1
+
+        document.getElementById(`formSampel_${index}`)?.remove()
+        document.getElementById(`tabBtn_${index}`)?.remove()
+        document
+          .querySelector(`[data-sample-result="${index}"]`)
+          ?.remove()
+
+        const forms = Array.from(
+          document.querySelectorAll('[id^="formSampel_"]'),
+        )
+        sampleCount = forms.length
+
+        forms.forEach((form, formPosition) => {
+          const newIndex = formPosition + 1
+          form.id = `formSampel_${newIndex}`
+          form.querySelectorAll('[id]').forEach((element) => {
+            element.id = element.id.replace(/_\d+$/, `_${newIndex}`)
+          })
+          form.querySelectorAll('*').forEach((element) => {
+            ;['onclick', 'onchange', 'oninput'].forEach((attribute) => {
+              const handler = element.getAttribute(attribute)
+              if (handler) {
+                element.setAttribute(
+                  attribute,
+                  handler.replace(
+                    /(switchTab|loadDataByNoSampel|toggleBangunan|removeSample)\(\d+\)/g,
+                    `$1(${newIndex})`,
+                  ),
+                )
+              }
+            })
+          })
+          const title = form.querySelector('[data-sample-title]')
+          if (title) {
+            const icon = title.querySelector('i')
+            title.replaceChildren(
+              ...(icon ? [icon] : []),
+              document.createTextNode(` Data Titik Sampel ${newIndex}`),
+            )
+          }
+        })
+
+        Array.from(document.querySelectorAll('[id^="tabBtn_"]')).forEach(
+          (button, buttonPosition) => {
+            const newIndex = buttonPosition + 1
+            button.id = `tabBtn_${newIndex}`
+            button.setAttribute('onclick', `switchTab(${newIndex})`)
+            if (button.lastChild) {
+              button.lastChild.textContent = ` Sampel ${newIndex}`
+            }
+          },
+        )
+
+        Array.from(
+          document.querySelectorAll('[data-sample-result]'),
+        ).forEach((row, rowPosition) => {
+          const newIndex = rowPosition + 1
+          row.dataset.sampleResult = newIndex
+          const label = row.querySelector('[data-sample-label]')
+          if (label) label.lastChild.textContent = `Sampel ${newIndex}:`
+          const value = row.querySelector('[id^="resVal"]')
+          const time = row.querySelector('[id^="resWaktu"]')
+          if (value) value.id = `resVal${newIndex}`
+          if (time) time.id = `resWaktu${newIndex}`
+        })
+
+        updateDeleteButtons()
+        const nextActiveIndex =
+          activeIndex === index
+            ? Math.min(index, sampleCount)
+            : activeIndex > index
+              ? activeIndex - 1
+              : activeIndex
+        switchTab(nextActiveIndex)
+        hitungGG()
       }
 
       function toggleBangunan(index) {
