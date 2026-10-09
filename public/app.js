@@ -186,16 +186,17 @@ let uploadedExcelData = []
       }
 
       function switchTab(index) {
-        document.querySelectorAll('[id^="formSampel_"]').forEach((form) => {
-          form.classList.toggle('hidden', form.id !== `formSampel_${index}`)
-        })
-
         document.querySelectorAll('[id^="tabBtn_"]').forEach((button) => {
           const isActive = button.id === `tabBtn_${index}`
           button.className = isActive
             ? 'flex-1 min-w-[90px] py-2.5 text-xs font-bold rounded-xl transition-all duration-200 bg-[#1f1a30] text-[#ffffff] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#373153]'
             : 'flex-1 min-w-[90px] py-2.5 text-xs font-bold rounded-xl transition-all duration-200 text-[#d0cde1] hover:bg-[#373153]/60 flex items-center justify-center gap-1.5 cursor-pointer'
         })
+
+        const selectedForm = document.getElementById(`formSampel_${index}`)
+        if (selectedForm && window.matchMedia('(max-width: 767px)').matches) {
+          selectedForm.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+        }
       }
 
       function addSample() {
@@ -207,7 +208,7 @@ let uploadedExcelData = []
           .replace(/\(3\)/g, `(${index})`)
           .replace(/Sampel 3/g, `Sampel ${index}`)
         newForm.id = `formSampel_${index}`
-        newForm.classList.add('hidden')
+        newForm.classList.add('snap-start')
         newForm.querySelectorAll('input').forEach((input) => {
           input.value =
             input.type === 'date'

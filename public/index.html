@@ -18,7 +18,7 @@
     class="bg-[#5d587c] text-[#ffffff] font-sans min-h-screen pb-10 flex flex-col justify-center items-center"
   >
     <!-- Main Container -->
-    <main class="w-full max-w-md lg:max-w-5xl mx-auto px-4 pt-6 space-y-4">
+    <main class="w-full max-w-[1600px] mx-auto px-4 pt-6 space-y-4">
       <!-- Card Upload Excel (Baru) -->
       <div
         class="bg-[#464165] rounded-2xl p-4 shadow-md border border-[#373153] flex flex-col sm:flex-row items-center justify-between gap-3"
@@ -52,9 +52,9 @@
         </label>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <div class="space-y-5">
         <!-- Kolom Kiri: Form & Tab Navigasi -->
-        <div class="lg:col-span-7 space-y-4">
+        <div class="space-y-4">
           <!-- Tab Navigation -->
           <div
             id="sampleTabList"
@@ -93,10 +93,10 @@
 
           <!-- Form Inputs Container -->
           <div
-            class="bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-6 transition-all"
+            class="grid grid-flow-col auto-cols-[90%] gap-4 overflow-x-auto snap-x snap-mandatory pb-2 md:grid-flow-row md:auto-cols-auto md:grid-cols-2 lg:grid-cols-3"
           >
             <!-- Form Sampel 1 -->
-            <div id="formSampel_1" class="space-y-3.5">
+            <div id="formSampel_1" class="space-y-3.5 snap-start bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-5">
               <div
                 class="flex items-center justify-between pb-2 border-b border-[#373153]"
               >
@@ -311,7 +311,7 @@
             </div>
 
             <!-- Form Sampel 2 -->
-            <div id="formSampel_2" class="space-y-3.5 hidden">
+            <div id="formSampel_2" class="space-y-3.5 snap-start bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-5">
               <div
                 class="flex items-center justify-between pb-2 border-b border-[#373153]"
               >
@@ -526,7 +526,7 @@
             </div>
 
             <!-- Form Sampel 3 -->
-            <div id="formSampel_3" class="space-y-3.5 hidden">
+            <div id="formSampel_3" class="space-y-3.5 snap-start bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-5">
               <div
                 class="flex items-center justify-between pb-2 border-b border-[#373153]"
               >
@@ -754,7 +754,7 @@
         </div>
 
         <!-- Kolom Kanan: Dashboard Hasil Analisis -->
-        <div class="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
+        <div class="space-y-4">
           <div
             class="bg-[#464165] rounded-2xl shadow-md border border-[#373153] p-4 lg:p-6 space-y-4"
           >
