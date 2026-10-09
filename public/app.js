@@ -260,8 +260,8 @@ let uploadedExcelData = []
             Sampel ${index}:
           </span>
           <div class="text-right">
-            <span data-sample-alert class="hidden text-[9px] font-extrabold tracking-wide text-red-300">MENYIMPANG ≥30%</span>
             <div id="resVal${index}" class="font-bold text-[#ffffff]">Rp 0 / m²</div>
+            <div id="resBangunan${index}" class="hidden text-[10px] text-[#d0cde1]/80">Nilai Bangunan: Rp 0</div>
             <div id="resWaktu${index}" class="text-[10px] text-[#d0cde1]/70">Penyesuaian Waktu: 0.00%</div>
           </div>`
         document.getElementById('sampleResults').appendChild(row)
@@ -344,8 +344,10 @@ let uploadedExcelData = []
           const label = row.querySelector('[data-sample-label]')
           if (label) label.lastChild.textContent = `Sampel ${newIndex}:`
           const value = row.querySelector('[id^="resVal"]')
+          const building = row.querySelector('[id^="resBangunan"]')
           const time = row.querySelector('[id^="resWaktu"]')
           if (value) value.id = `resVal${newIndex}`
+          if (building) building.id = `resBangunan${newIndex}`
           if (time) time.id = `resWaktu${newIndex}`
         })
 
@@ -456,8 +458,11 @@ let uploadedExcelData = []
               formatRupiah(result.nilai) + ' / m²'
             valueElement.classList.toggle('text-red-400', result.isOutlier)
             valueElement.classList.toggle('text-[#ffffff]', !result.isOutlier)
-            const row = document.querySelector(`[data-sample-result="${sampleNumber}"]`)
-            row?.querySelector('[data-sample-alert]')?.classList.toggle('hidden', !result.isOutlier)
+            const buildingElement = document.getElementById(`resBangunan${sampleNumber}`)
+            const hasBuilding = ['B', 'R'].includes(samples[index].jenisObjek)
+            buildingElement.innerText =
+              'Nilai Bangunan: ' + formatRupiah(result.nilaiBangunan)
+            buildingElement.classList.toggle('hidden', !hasBuilding)
             document.getElementById(`resWaktu${sampleNumber}`).innerText =
               'Penyesuaian Waktu: ' + result.persenWaktu.toFixed(2) + '%'
           })

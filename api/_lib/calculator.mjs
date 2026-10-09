@@ -151,13 +151,15 @@ function getBuildingValue(data, referenceYear) {
 
 function calculateOne(data) {
   const landArea = Number(data.luasTanah) || 0
-  if (landArea <= 0) return { nilai: 0, persenWaktu: 0 }
-
   const transactionDate = data.tglTransVal ? new Date(`${data.tglTransVal}T00:00:00`) : new Date()
   if (Number.isNaN(transactionDate.getTime())) throw new Error('Tanggal transaksi tidak valid.')
   const referenceYear = transactionDate.getFullYear()
-  const adjustedPrice = (Number(data.hargaAwal) || 0) * (data.jenisData === 'Penawaran' ? 0.9 : 1)
   const buildingValue = getBuildingValue(data, referenceYear)
+  if (landArea <= 0) {
+    return { nilai: 0, persenWaktu: 0, nilaiBangunan: buildingValue }
+  }
+
+  const adjustedPrice = (Number(data.hargaAwal) || 0) * (data.jenisData === 'Penawaran' ? 0.9 : 1)
   const landValuePerMeter = (adjustedPrice - buildingValue) / landArea
   const cutoffDate = new Date(`${referenceYear}-12-31T00:00:00`)
   const dayDifference = (cutoffDate - transactionDate) / 86400000
@@ -167,6 +169,7 @@ function calculateOne(data) {
   return {
     nilai: landValuePerMeter * (1 + timeAdjustment + rightAdjustment),
     persenWaktu: timeAdjustment * 100,
+    nilaiBangunan: buildingValue,
   }
 }
 
